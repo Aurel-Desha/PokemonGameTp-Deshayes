@@ -41,4 +41,15 @@ public class LigueController {
         return new ResponseEntity<>(ligue, HttpStatus.CREATED);
     }
 
+    @PutMapping
+    public ResponseEntity<Ligue> update(@PathVariable String id, @RequestBody Ligue ligue) {
+        Ligue ligue1 = ligueService.findById(id);
+        if (ligue1 == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        ligueService.save(ligue);
+        return new ResponseEntity<>(ligue, HttpStatus.OK);
+    }
+
+
 }
