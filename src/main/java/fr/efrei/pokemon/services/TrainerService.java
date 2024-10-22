@@ -3,6 +3,7 @@ package fr.efrei.pokemon.services;
 import fr.efrei.pokemon.dto.CreateTrainer;
 import fr.efrei.pokemon.dto.UpdateTrainer;
 import fr.efrei.pokemon.models.Pokemon;
+import fr.efrei.pokemon.models.Shop;
 import fr.efrei.pokemon.models.Trainer;
 import fr.efrei.pokemon.repositories.TrainerRepository;
 import jakarta.transaction.Transactional;
@@ -17,11 +18,13 @@ public class TrainerService {
 
     private final TrainerRepository repository;
     private final PokemonService pokemonService;
+    private final ShopService shopService;
 
     @Autowired
-    public TrainerService(TrainerRepository repository, PokemonService pokemonService) {
+    public TrainerService(TrainerRepository repository, PokemonService pokemonService, ShopService shopService) {
         this.repository = repository;
         this.pokemonService = pokemonService;
+        this.shopService = shopService;
     }
 
     public List<Trainer> findAll() {
@@ -51,6 +54,7 @@ public class TrainerService {
         }
         // j'applique la liste de pokemon au trainer que je créé
         trainer.setTeam(pokemonAAjouter);
+        trainer.setMoney(trainerBody.getMoney());
         // pokemonIds.forEach(id -> pokemonService.findById(id));
         repository.save(trainer);
     }
@@ -72,6 +76,27 @@ public class TrainerService {
             }
             pokemonList.addAll(trainer.getTeam());
             trainer.setTeam(pokemonList);
+        }
+
+        if (trainerBody.getItems() != null && !trainerBody.getItems().isEmpty()) {
+            List<Shop> shopList = new ArrayList<>();
+            List<String> shopIds = trainerBody.getItems();
+            int currentMoney = trainerBody.getMoney();
+            for(String shopItem: shopIds) {
+                Shop shop = shopService.findById(shopItem);
+                if(shop != null) {
+                    if(currentMoney < shop.getPrice()) {
+                        System.out.println("argent insuffisant");
+                    } else {
+                        currentMoney -= shop.getPrice();
+                        shopList.add(shop);
+                    }
+
+                }
+            }
+            shopList.addAll(trainer.getItems());
+            trainer.setItems(shopList);
+            trainer.setMoney(currentMoney);
         }
         repository.save(trainer);
     }

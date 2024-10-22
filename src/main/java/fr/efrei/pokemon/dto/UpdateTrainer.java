@@ -8,6 +8,10 @@ public class UpdateTrainer {
 
     private List<String> team;
 
+    private List<String> items;
+
+    private int money;
+
     public String getName() {
         return name;
     }
@@ -22,5 +26,21 @@ public class UpdateTrainer {
 
     public void setTeam(List<String> team) {
         this.team = team;
+    }
+
+    public List<String> getItems() {
+        return items;
+    }
+
+    public void setItems(List<String> items) {
+        this.items = items;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 }

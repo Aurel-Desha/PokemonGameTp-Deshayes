@@ -16,6 +16,12 @@ public class Trainer {
     @OneToMany
     private List<Pokemon> team;
 
+    @OneToMany
+    private List<Shop> items;
+
+    private int money;
+
+
     public String getId() {
         return id;
     }
@@ -39,4 +45,21 @@ public class Trainer {
     public void setTeam(List<Pokemon> team) {
         this.team = team;
     }
+
+    public List<Shop> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Shop> items) {
+        this.items = items;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
 }
